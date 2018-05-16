@@ -43,4 +43,9 @@ describe(`Class Gate.constructor
     assert.equal(gate.gates.size, 0);
   });
 
+  it("Sets callbacks map", () => {
+    const gate = new Gate("test_id");
+    assert.ok(gate.callbacks instanceof Map);
+  });
+
 });

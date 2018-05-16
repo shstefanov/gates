@@ -89,7 +89,7 @@ describe(`Class Gate.send
     assert.equal(callback, undefined);
   });
 
-  it("Callbacks (2 nodes)", () => {
+  it("Callbacks (2 nodes)", (next) => {
     let param, callback;
     class ChildGate extends Gate {
       handle(data, cb){
@@ -105,6 +105,11 @@ describe(`Class Gate.send
     root.send(["a1"], { data: 45 }, function(...args){
       assert.deepEqual(param, { data: 45 });
       assert.deepEqual(args, [12, "34", [123]]);
+      root.send(["a1"], { data: 46 }, function(...args){
+        assert.deepEqual(param, { data: 46 });
+        assert.deepEqual(args, [12, "34", [123]]);
+        next();
+      });
     });
 
   });
