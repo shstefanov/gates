@@ -1,0 +1,21 @@
+{
+  "name": "gates",
+  "version": "1.4.4",
+  "private": false,
+  "author": {
+    "name": "Stefan Stefanov",
+    "email": "s.h.stefanov@mail.bg"
+  },
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": {
+    "underscore": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest"
+  },
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha --recursive --colors --sort --check-leaks --full-trace --throw-deprecation test"
+  },
+  "repository": "git://github.com/shstefanov/gates"
+}
