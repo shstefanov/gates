@@ -50,7 +50,7 @@ describe(`Class Gate.send
 
   });
 
-  it("Sends message trough chain (2 nodes)", ()=>{
+  it("Sends message trough chain (2 nodes)", () => {
 
     let param, callback;
     class ChildGate extends Gate {
@@ -65,9 +65,10 @@ describe(`Class Gate.send
 
     root.send(["branch"], { data: 22 });
     assert.deepEqual(param, { data: 22 });
+    assert.equal(callback, undefined);
   });
 
-  it("Sends message trough chain (4 nodes)", ()=>{
+  it("Sends message trough chain (4 nodes)", () => {
     let param, callback;
     class ChildGate extends Gate {
       handle(data, cb){
@@ -76,8 +77,8 @@ describe(`Class Gate.send
     }
 
     const root   = new Gate("root");
-    const a1   = new Gate("a1");
-    const a2   = new Gate("a2");
+    const a1     = new Gate("a1");
+    const a2     = new Gate("a2");
     const branch = new ChildGate("branch");
     root.add(a1);
     a1.add(a2);
@@ -85,6 +86,27 @@ describe(`Class Gate.send
 
     root.send(["a1", "a2", "branch"], { data: 33 });
     assert.deepEqual(param, { data: 33 });
+    assert.equal(callback, undefined);
+  });
+
+  it("Callbacks (2 nodes)", () => {
+    let param, callback;
+    class ChildGate extends Gate {
+      handle(data, cb){
+        param = data, callback = cb;
+        cb(12, "34", [123])
+      }
+    }
+
+    const root   = new Gate("root");
+    const a1     = new ChildGate("a1");
+    root.add(a1);
+
+    root.send(["a1"], { data: 45 }, function(...args){
+      assert.deepEqual(param, { data: 45 });
+      assert.deepEqual(args, [12, "34", [123]]);
+    });
+
   });
 
 });
