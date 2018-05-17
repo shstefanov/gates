@@ -114,4 +114,31 @@ describe(`Class Gate.send
 
   });
 
+
+  it("Callbacks (n nodes)", (next) => {
+
+    class ChildGate extends Gate {
+      handle(data, cb){
+        cb(data, "34", [123]);
+      }
+    }
+
+    let first, last;
+    var gates = ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9"].map((id)=>{
+      var node = new ChildGate(id);
+      if(last) {
+        last.add(node);
+      }
+      else first = node;
+      last = node;
+      return node;
+    });
+
+    first.send(["a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9"], { data: 65 }, function(...args){
+      assert.deepEqual(args, [{ data: 65 }, "34", [123]]);
+      next();
+    });
+
+  });
+
 });
